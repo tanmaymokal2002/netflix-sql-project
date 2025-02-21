@@ -145,10 +145,18 @@ GROUP BY 1
 ORDER BY 2 DESC
 
 -- 15. Categorize Content Based on the Presence of 'Kill' and 'Violence' Keywords
-SELECT *
-FROM netflix
-WHERE description ILIKE '%kill%'
-OR description ILIKE '%violence%'
+SELECT
+    category,
+    COUNT(*) AS content_count
+FROM (
+    SELECT
+        CASE
+            WHEN description ILIKE '%kill%' OR description ILIKE '%violence%' THEN 'Bad'
+            ELSE 'Good'
+        END AS category
+    FROM netflix
+) AS categorized_content
+GROUP BY category;
 
 
 
